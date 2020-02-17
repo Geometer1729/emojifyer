@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# lift up the keys bound to run this script so no acidental keybinds get activated
+xdotool keyup alt
+xdotool keyup e
+
+xdotool key ctrl+a #select all
+xdotool key ctrl+x #cut
+xclip -selection clipboard -o | /bin/emojifyer | xclip -selection clipboard # pipe clipboard through haskell
+xdotool key ctrl+v #paste
