@@ -14,7 +14,7 @@ Installation
 
 ```
 git clone "https://github.com/Geometer1729/emojifyer.git"
-cd Emojify
+cd emojifyer
 sudo make
 ```
 
