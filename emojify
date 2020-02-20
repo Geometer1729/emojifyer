@@ -4,7 +4,36 @@
 xdotool keyup alt
 xdotool keyup e
 
+oldClipBoard=$(xclip -selection clipboard -o)
+echo "" | xclip -selection clipboard # clear clipboard in case ctr+a ctrl+x fails
 xdotool key ctrl+a #select all
 xdotool key ctrl+x #cut
-xclip -selection clipboard -o | /bin/emojifyer | xclip -selection clipboard # pipe clipboard through haskell
-xdotool key ctrl+v #paste
+
+
+xclip -selection clipboard -o | /bin/emojifyer | {
+	lines=0
+	while read -r line 
+	do
+		if [ $lines = 1 ]
+		then
+			continue=$( printf "yes\nno" | dmenu -p "automatically send multi-message output?" )
+			if [ "$continue" != "yes" ]
+			then
+				sleep 1s
+				xdotool key ctrl+a
+				xdotool key BackSpace
+				xdotool key ctrl+v
+				echo "$oldClipBoard" | xclip -selection clipboard
+				exit
+			fi
+		fi
+		xdotool key KP_Enter
+		echo "$line" | xclip -selection clipboard 
+		xdotool key ctrl+v 
+		((lines++))
+		sleep 1s
+	done 
+	[ "$continue" = yes ] && xdotool key KP_Enter
+	echo "$oldClipBoard" | xclip -selection clipboard
+}
+

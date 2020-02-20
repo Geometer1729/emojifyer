@@ -3,10 +3,23 @@ import Data.List
 import Data.Maybe
 
 emojify :: String -> String
-emojify w = unwords [ if head word `elem` "#@"
-  then word -- don't change pings and channels
-  else " " ++ emojifyWord word ++ " " -- pad with extra space to seperate emojified words
-    | word <- words w ]
+emojify w = 
+  let ws = [ if head word `elem` "#@"
+             then word -- don't change pings and channels
+             else " " ++ emojifyWord word ++ " " -- pad with extra space to seperate emojified words
+             | word <- words w ]
+  in unlines $ discMs ws
+
+discMs :: [String] -> [String]
+discMs [] = []
+discMs xs = let
+  ws = getFstN 2000 xs
+  l = length ws
+  in (unwords ws):(discMs $ drop l xs)
+
+getFstN :: Int -> [String] -> [String]
+getFstN n (x:xs) = let l = 1 + length x in if l > n then [] else x : (getFstN (n-l)) xs
+getFstN _ [] = []
 
 emojifyWord :: String -> String
 emojifyWord w = let

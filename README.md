@@ -9,6 +9,7 @@ If you intend to use some other binding change the first two lines of ./emojify 
 - xclip
 - xdotool
 - ghc
+- dmenu
 
 
 # Installation
